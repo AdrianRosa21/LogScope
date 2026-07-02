@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogScope Web</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="glass-container main-wrapper">
+        <header>
+            <h1>LogScope</h1>
+            <p>IA como herramienta, no como autor</p>
+        </header>
+
+        <div class="tabs-container">
+            <button class="tab-btn active" id="btn-tab-file" onclick="switchTab('file')">Subir archivo TXT</button>
+            <button class="tab-btn" id="btn-tab-text" onclick="switchTab('text')">Escribir o pegar texto</button>
+        </div>
+
+        <section class="input-section active" id="sec-file">
+            <div class="upload-zone" id="drop-zone">
+                <p>Arrastra y suelta tu archivo <b>.txt</b> aquí o haz clic para subir</p>
+                <input type="file" id="file-input" accept=".txt" hidden>
+            </div>
+            <div class="controls-post" id="file-controls" style="display: none;">
+                <p id="file-name-display" style="color: var(--text-secondary); margin-bottom: 15px; font-style: italic;"></p>
+                <div class="btn-group">
+                    <button class="btn primary" onclick="document.getElementById('file-input').click()">Cargar otro archivo</button>
+                    <button class="btn secondary" onclick="limpiarAnalisis()">Limpiar análisis</button>
+                    <button class="btn export" id="btn-exportar-file" disabled onclick="alert('Exportador pendiente de integración.')">Exportar reporte</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="input-section" id="sec-text" style="display: none;">
+            <textarea id="manual-text" placeholder="Pega o escribe las líneas de log aquí..."></textarea>
+            <div class="btn-group">
+                <button class="btn primary" id="btn-analyze-text" onclick="analyzeText()">Analizar texto</button>
+                <button class="btn secondary" onclick="limpiarAnalisis()">Limpiar análisis</button>
+                <button class="btn export" id="btn-exportar-text" disabled onclick="alert('Exportador pendiente de integración.')">Exportar reporte</button>
+            </div>
+        </section>
+        
+        <div class="dashboard" id="dashboard" style="display: none;">
+            <div class="cards">
+                <div class="card"><h3>Total</h3><span id="c-total">0</span></div>
+                <div class="card"><h3>Válidos</h3><span id="c-validos">0</span></div>
+                <div class="card info-card"><h3>INFO</h3><span id="c-info">0</span></div>
+                <div class="card warn-card"><h3>WARNING</h3><span id="c-warn">0</span></div>
+                <div class="card err-card"><h3>ERROR</h3><span id="c-err">0</span></div>
+                <div class="card"><h3>Malformados</h3><span id="c-malf">0</span></div>
+            </div>
+
+            <div class="content-split">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h2>Detalle de Logs</h2>
+                        <select id="filter-select">
+                            <option value="Todos">Todos</option>
+                            <option value="Válidos">Válidos</option>
+                            <option value="Malformados">Malformados</option>
+                            <option value="INFO">INFO</option>
+                            <option value="WARNING">WARNING</option>
+                            <option value="ERROR">ERROR</option>
+                        </select>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Línea</th>
+                                <th>Estado</th>
+                                <th>Severidad</th>
+                                <th>Fecha</th>
+                                <th>Mensaje</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+                            <!-- Filas dinámicas -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="side-panel">
+                    <div class="chart-container glass-panel">
+                        <canvas id="severityChart"></canvas>
+                    </div>
+                    <div class="details-container glass-panel">
+                        <h3>Detalle de Línea</h3>
+                        <div id="line-details">
+                            <p class="placeholder" style="color: #94a3b8; font-style: italic;">Selecciona una fila en la tabla para inspeccionar su estructura interna original y los fallos exactos.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

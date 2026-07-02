@@ -1,0 +1,10 @@
+[INFO] 2023-10-25 Sistema iniciado correctamente.
+WARNING 2023-10-25 Memoria al 80%.
+[error] 2023-10-25 No se pudo conectar a la base de datos local.
+INFO Usuario logueado exitosamente (esta línea no tiene fecha).
+[debug] 2023-10-25 Este nivel de severidad es inválido según DECISIONES.md.
+[INFO] 2025-02-30 Esta fecha es imposible en el calendario, debe marcar error.
+[WARNING] 2023/10/25 Fecha con formato de barras en lugar de guiones.
+[ERROR] 
+
+INFO 2023-10-26 Tareas de limpieza ejecutadas con éxito.
