@@ -4,7 +4,7 @@
 En este proyecto, se aplicó el principio rector: *"La IA es una herramienta, no un autor"*. 
 Para asegurar esto, el desarrollo inició estableciendo un documento estricto de reglas de negocio (`DECISIONES.md`) escrito y aprobado por mí como desarrollador. 
 
-- **Rol del Estudiante:** Fui el arquitecto del sistema. Tomé decisiones críticas de diseño, como la separación estricta del núcleo (`analyzer.py`) y la interfaz (`main.py` / HTML), los modelos de transferencia de datos (`ResumenAnalisis`), y la decisión del pivote tecnológico (de `.exe` a Web).
+- **Rol del Estudiante:** Fui el arquitecto del sistema. Tomé decisiones críticas de diseño, como la separación estricta del núcleo (`analyzer.py`) y la interfaz (`main.py` / HTML), los modelos de transferencia de datos (`ResumenAnalisis`), y la decisión del pivote tecnológico (de `.exe` a Web), y creación del Documento DESICIONES.md.
 - **Rol de la IA:** Actuó como un *junior developer* (o asistente de *vibecoding*), escribiendo la sintaxis repetitiva, generando las clases CSS y acatando sin objeciones las directrices del documento de decisiones. No se le permitió inventar reglas de negocio ni alterar el comportamiento esperado.
 
 ## 2. Ejemplos de Corrección y Orientación a la IA
