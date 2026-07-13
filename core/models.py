@@ -22,7 +22,7 @@ class ResultadoLinea:
 @dataclass
 class ResumenAnalisis:
     """
-    Agrupa las estadísticas totales del archivo procesado junto con
+    Agrupa las estadísticas totales del texto o archivo procesado junto con
     la lista de todas las líneas analizadas.
     """
     total_lineas: int = 0

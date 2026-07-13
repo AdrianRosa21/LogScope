@@ -246,3 +246,98 @@ function renderChart(info, warn, err, malf) {
         }
     });
 }
+
+// Agent Logic
+function requestAgentDiagnosis() {
+    if (allResults.length === 0) {
+        alert("No hay resultados para analizar.");
+        return;
+    }
+    
+    const btn = document.getElementById('btn-agent-diagnose');
+    btn.disabled = true;
+    btn.textContent = 'Pensando...';
+    
+    const payload = {
+        total_lineas: parseInt(document.getElementById('c-total').textContent),
+        eventos_validos: parseInt(document.getElementById('c-validos').textContent),
+        total_error: parseInt(document.getElementById('c-err').textContent),
+        total_warning: parseInt(document.getElementById('c-warn').textContent),
+        malformados: parseInt(document.getElementById('c-malf').textContent),
+        resultados: []
+    };
+    
+    fetch('/agent_triage', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.error) throw new Error(data.error);
+        
+        document.getElementById('agent-results').style.display = 'block';
+        
+        const diag = data.diagnostico_agente;
+        
+        const priorityEl = document.getElementById('agent-priority');
+        priorityEl.textContent = diag.prioridad;
+        if (diag.prioridad === 'CRITICA') priorityEl.style.color = '#ef4444';
+        else if (diag.prioridad === 'ALTA') priorityEl.style.color = '#f97316';
+        else if (diag.prioridad === 'MEDIA') priorityEl.style.color = '#f59e0b';
+        else priorityEl.style.color = '#10b981';
+        
+        document.getElementById('agent-comment').textContent = `"${data.llm_comentario}"`;
+        document.getElementById('agent-skills').textContent = data.skills_usadas.join(', ');
+        
+        const populateList = (id, items) => {
+            const ul = document.getElementById(id);
+            ul.innerHTML = '';
+            items.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                ul.appendChild(li);
+            });
+        };
+        
+        populateList('agent-facts', diag.hechos);
+        populateList('agent-inferences', diag.inferencias);
+        populateList('agent-recommendations', diag.recomendaciones);
+    })
+    .catch(err => {
+        alert('Error del agente: ' + err.message);
+    })
+    .finally(() => {
+        btn.disabled = false;
+        btn.textContent = 'Generar Diagnóstico de Incidentes';
+    });
+}
+
+function exportarDatos(formato) {
+    if (allResults.length === 0) return;
+    const payload = {
+        total_lineas: parseInt(document.getElementById('c-total').textContent),
+        eventos_validos: parseInt(document.getElementById('c-validos').textContent),
+        resultados: allResults
+    };
+    
+    fetch('/export', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ resumen: payload, formato: formato })
+    })
+    .then(res => res.blob())
+    .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `reporte.${formato}`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+    })
+    .catch(err => alert('Error exportando: ' + err.message));
+}
+
+document.getElementById('btn-exportar-file').addEventListener('click', () => exportarDatos('json'));
+document.getElementById('btn-exportar-text').addEventListener('click', () => exportarDatos('txt'));

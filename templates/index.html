@@ -30,7 +30,7 @@
                 <div class="btn-group">
                     <button class="btn primary" onclick="document.getElementById('file-input').click()">Cargar otro archivo</button>
                     <button class="btn secondary" onclick="limpiarAnalisis()">Limpiar análisis</button>
-                    <button class="btn export" id="btn-exportar-file" disabled onclick="alert('Exportador pendiente de integración.')">Exportar reporte</button>
+                    <button class="btn export" id="btn-exportar-file" disabled>Exportar reporte</button>
                 </div>
             </div>
         </section>
@@ -40,7 +40,7 @@
             <div class="btn-group">
                 <button class="btn primary" id="btn-analyze-text" onclick="analyzeText()">Analizar texto</button>
                 <button class="btn secondary" onclick="limpiarAnalisis()">Limpiar análisis</button>
-                <button class="btn export" id="btn-exportar-text" disabled onclick="alert('Exportador pendiente de integración.')">Exportar reporte</button>
+                <button class="btn export" id="btn-exportar-text" disabled>Exportar reporte</button>
             </div>
         </section>
         
@@ -93,6 +93,35 @@
                             <p class="placeholder" style="color: #94a3b8; font-style: italic;">Selecciona una fila en la tabla para inspeccionar su estructura interna original y los fallos exactos.</p>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <div class="agent-section glass-panel" style="margin-top: 20px;">
+                <h2>🤖 Diagnóstico del Agente</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 15px;">
+                    El agente interpreta los resultados de la validación determinista. Nunca altera la validez de los logs.
+                </p>
+                <button class="btn primary" id="btn-agent-diagnose" onclick="requestAgentDiagnosis()">Generar Diagnóstico de Incidentes</button>
+                <div id="agent-results" style="display: none; margin-top: 20px;">
+                    <div style="margin-bottom: 15px;">
+                        <h3>Nivel de Prioridad: <strong id="agent-priority"></strong></h3>
+                    </div>
+                    <div style="background-color: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                        <p id="agent-comment" style="font-style: italic; color: #cbd5e1; margin: 0;"></p>
+                    </div>
+                    
+                    <h4 style="color: var(--c-info);">Hechos Observados</h4>
+                    <ul id="agent-facts" style="margin-bottom: 15px; padding-left: 20px;"></ul>
+                    
+                    <h4 style="color: var(--c-warn);">Inferencias</h4>
+                    <ul id="agent-inferences" style="margin-bottom: 15px; padding-left: 20px;"></ul>
+                    
+                    <h4 style="color: var(--c-err);">Recomendaciones</h4>
+                    <ul id="agent-recommendations" style="margin-bottom: 15px; padding-left: 20px;"></ul>
+                    
+                    <p style="margin-top: 20px; font-size: 0.85em; color: var(--text-secondary);">
+                        Skills utilizadas: <span id="agent-skills" style="font-weight: 500;"></span>
+                    </p>
                 </div>
             </div>
         </div>
