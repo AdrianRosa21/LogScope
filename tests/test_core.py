@@ -2,9 +2,10 @@ import unittest
 import os
 import tempfile
 from datetime import datetime
-from analyzer import analizar_linea, analizar_archivo
+from core.validator import analizar_linea
+from application.analysis_service import analizar_archivo, analizar_texto
 
-class TestAnalyzer(unittest.TestCase):
+class TestCoreAnalyzer(unittest.TestCase):
     def test_01_info_con_fecha_valida(self):
         res = analizar_linea("[INFO] 2025-10-15 Todo bien", 1)
         self.assertTrue(res.es_valida)
@@ -86,14 +87,14 @@ class TestAnalyzer(unittest.TestCase):
         try:
             resumen = analizar_archivo(nombre)
             
-            # 13. Conteos correctos
+            # Conteos correctos
             self.assertEqual(resumen.total_lineas, 6)
             self.assertEqual(resumen.eventos_validos, 3)
             self.assertEqual(resumen.total_info, 1)
             self.assertEqual(resumen.total_warning, 1)
             self.assertEqual(resumen.total_error, 1)
             
-            # 15. Número de línea correcto en errores
+            # Número de línea correcto en errores
             self.assertEqual(resumen.resultados[2].numero_linea, 3)
             self.assertFalse(resumen.resultados[2].es_valida)
             
@@ -102,6 +103,16 @@ class TestAnalyzer(unittest.TestCase):
             
         finally:
             os.remove(nombre)
+            
+    def test_16_analisis_texto_directo(self):
+        texto = "[INFO] 2025-01-01 Ok\nERROR Fuego"
+        resumen = analizar_texto(texto)
+        self.assertEqual(resumen.total_lineas, 2)
+        self.assertEqual(resumen.eventos_validos, 2)
 
-if __name__ == '__main__':
-    unittest.main()
+    def test_17_html_injection(self):
+        # Verifica que el parseo no se rompa con caracteres de inyección
+        texto = "[INFO] 2025-01-01 <script>alert(1)</script>"
+        res = analizar_linea(texto, 1)
+        self.assertTrue(res.es_valida)
+        self.assertEqual(res.mensaje, "<script>alert(1)</script>")

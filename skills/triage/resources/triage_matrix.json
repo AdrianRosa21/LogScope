@@ -1,0 +1,14 @@
+{
+    "critical": {
+        "error_threshold_pct": 20,
+        "error_threshold_count": 50
+    },
+    "alta": {
+        "error_threshold_pct": 5,
+        "error_threshold_count": 10
+    },
+    "media": {
+        "warning_threshold_count": 5,
+        "malformed_threshold_pct": 10
+    }
+}
